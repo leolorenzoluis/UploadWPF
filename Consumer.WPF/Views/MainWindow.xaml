@@ -1,0 +1,115 @@
+﻿<Window x:Class="Consumer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Consumer"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModels="clr-namespace:Consumer.ViewModels"
+        Title="FIVE"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}" d:DataContext="{d:DesignInstance viewModels:MainViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="Exams" ItemsSource="{Binding Exams}" SelectedItem="{Binding SelectedExam}"  SelectionChanged="OnExamSelected">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Style="{DynamicResource MaterialDesignDisplay1TextBlock}" Text="{Binding ExamName}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Column="1" Visibility="Collapsed" x:Name="FilesContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="2" Drop="OnUploadDrop" AllowDrop="True" Background="#E91E63" Height="250">
+                <TextBlock VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignDisplay1TextBlock}" Text="Drop files here"></TextBlock>
+                <Button Click="Upload" HorizontalAlignment="Left">Upload Directory</Button>
+            </Grid>
+
+            <Grid Grid.Row="1" x:Name="UploadContainer" Visibility="{Binding UploadContainerVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Uploaded files:" Style="{DynamicResource MaterialDesignDisplay1TextBlock}"></TextBlock>
+                <ListBox Grid.Row="1" ItemsSource="{Binding Uploads}"
+                     HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding FileName}"></TextBlock>
+                                <ProgressBar Grid.Row="1" x:Name="UploadProgress"
+                                             Value="{Binding TransferredBytes, Mode=OneWay}"
+                                             Maximum="100" Minimum="0">
+                                </ProgressBar>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <ListBox Grid.Row="0" ItemsSource="{Binding ElementName=Exams, Path=SelectedItem.ExamFiles}" SelectedValuePath="Value"
+                     HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Style="{DynamicResource MaterialDesignTitleTextBlock}"
+                                       Text="{Binding Value.FileName}" />
+                            <TextBlock Grid.Row="1" FontFamily="{DynamicResource MaterialDesignFont}"
+                                       Text="{Binding Value.FilePath}" />
+                            <TextBlock Grid.Row="2" FontFamily="{DynamicResource MaterialDesignFont}"
+                                       Text="{Binding Value.UploadDate}" />
+                            <TextBlock Grid.Row="3" FontFamily="{DynamicResource MaterialDesignFont}"
+                                       Text="{Binding Value.UserId}" />
+                            <TextBlock Grid.Row="4" FontFamily="{DynamicResource MaterialDesignFont}"
+                                       Text="{Binding Value.FileId}" />
+                            <Button Grid.Row="5" Click="DownloadFile" HorizontalAlignment="Right">Download</Button>
+                            <TextBlock Grid.Row="6" Style="{DynamicResource MaterialDesignBodyTextBlock}"
+                                       FontFamily="{DynamicResource MaterialDesignFont}" Text="Download Progress" />
+                            <ProgressBar Grid.Row="7" Value="{Binding Value.DownloadProgress, Mode=OneWay}"
+                                         Maximum="100" Minimum="0">
+                            </ProgressBar>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Window>
+
+
+
+
+
+
+
